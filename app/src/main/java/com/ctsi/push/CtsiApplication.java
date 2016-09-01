@@ -3,8 +3,8 @@ package com.ctsi.push;
 import android.app.Application;
 import android.content.Context;
 
-import com.ctsi.push.core.PushBuilder;
-import com.ctsi.push.core.PushService;
+import com.ctsi.push.lib.PushBuilder;
+import com.ctsi.push.lib.PushService;
 import com.ctsi.push.lib.pusher.ConnectionCallback;
 import com.ctsi.push.lib.pusher.MessageCallback;
 import com.ctsi.push.lib.pusher.RegisterCallback;
