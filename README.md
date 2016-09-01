@@ -38,7 +38,7 @@
  
 --- 
  
-####消息设计
+####消息类型
 
 根据消息的不同使用方式，可以分为以下几类：
    1. #####提醒消息
@@ -49,8 +49,98 @@
     URI消息是动态发布消息的手段，他的标准动作是创建一个Notification或者一个Dialog,引导远程访问网站或者下载网络资源。
    3. #####消息命令
    
-   消息命令是一种格式化的消息，通过对消息的解析，完成一些命令，和前面两种消息的区别在于，消息命令通常是用户不可知的,除了android客户端单次定位场景以外，更多的是进行远程运维。在平台实现方面,Android更适合这种消息命令，iOS由于机制的问题，无法保证实时性，要慎重使用。
+   消息命令是一种格式化的消息，通过对消息的解析，完成一些命令，和前面两种消息的区别在于，消息命令通常是用户不可知的,除了android客户端单次定位场景以外，更多的是进行远程运维。在平台实现方面,Android更适合这种消息命令，iOS由于机制的问题，无法保证实时性，要区分平台使用。
  
-####框架设计
+---
 
-####第三方选型
+####移动端框架设计
+#####设计方向：
+1. 构建的推送服务与具体推送服务SDK无关(可以在多个服务提供商之间任意切换)
+>这么设计一方面是这样的设计更加符合面向高层、抽象设计的原则；
+>另一方面，为不同的设备提供不同推送服务的提供可能性（具体请参考概述-Android推送）
+2. 使用消息队列处理推送消息(Android)
+3. 消息解析器设计灵活（如增加消息本地持久化逻辑）、易扩展、职责单一
+4. 设计要适用于iOS、Android双平台
+
+#####框架及流转图：
+
+
+![Push Message Flow](http://doulala.oss-cn-qingdao.aliyuncs.com/image/PushMessageFlow.jpg)
+  1. **PushInterface**, 由 IPusher 和 MessageQueue 组成,通过PushInterfaceBuilder创建。是应用开发人员操作Push服务的统一入口。
+  2. **IPusher**, 定义的第三方推送服务接口,第三方推送平台按照接口实现，即可加入该平台推送能力。
+  3. **Dispatcher**,用来完成对推送消息的第一次过滤、封装,并添加到消息队列。比如可以在这里加入消息持久化逻辑。
+  4. **MessageQueue**,维护一个消息队列,管理消息生命周期,消息处理交给PushMessageHandlerBus。
+  5. **MessageHandler**,是用户自定义的Handler,每个handler可以仅处理一种消息,并实现独立的逻辑，结构也会比较清晰。
+  6. **DefaultMessageHandler**， 是MessageHandler的实现，他是最后统一处理未匹配消息的地方，一个MessageQueue可以有最多一个DefaultMessageHandler。
+
+#####创建 PushInterface
+
+```java
+ private void initPush() {
+        pushInterface = PushBuilder.builder()
+                .pusher(new JPusher(CtsiApplication.this))
+                .defaultMessageHandler(null)
+                .addMessageHandler(messageHandlerA)
+                .callback(messageCallback)
+                .callback(registerCallback)
+                .callback(connectionCallback)
+                .build();
+
+        pushInterface.start();
+    }
+```
+
+
+---
+####服务器端消息协议设计
+
+通过PushMessageBuilder建立通用的Message：
+```java
+public class PushMessageBuilder{
+
+   public  static PushServiceBuilder builder();
+
+   public static PushServiceBuilder alias(String alias);//设置别名
+
+   public static PushServiceBuilder tags(Set<String>tags);//设置标签
+
+   public static PushServiceBuilder platform(PlatForm platform);//设置平台
+   
+   public PushServiceBuilder noticeMessage(NoticeMessage message);//通知消息
+ 
+   public static PushServiceBuilder urlMessage(UrlMessage message);//Url消息
+   
+   public static PushServiceBuilder androidCommandMessage(AndroidCommandMessage message);//消息命令
+  
+   public PushMessage build();
+}
+
+```
+通过不同推送服务可以实现PushService接口,用来发送PushMessage:
+
+```java
+public interface PushService{
+   void sendMessage(PushMessage message);
+   ...
+} 
+```
+一共设计了3种推送消息：
+
+1. **NoticeMessage**.用来推送自定义消息：
+```java
+public class NoticeMessage{
+   //TO-DO
+} 
+```
+2. **UrlMessage**.用来推送Url页面：
+```java
+public class UrlMessage{
+   //TO-DO
+} 
+```
+3. **AndroidCommandMessage**.主要用来针对Android的命令消息进行推送,如单次定位
+```java
+public class AndroidCommandMessage{
+   //TO-DO
+} 
+```
