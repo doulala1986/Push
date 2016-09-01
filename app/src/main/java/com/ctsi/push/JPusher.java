@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.ctsi.push.lib.pusher.ConnectionCallback;
 import com.ctsi.push.lib.pusher.IPusher;
@@ -27,19 +29,27 @@ public class JPusher implements IPusher {
 
     static {
 
+        actionsFilter.addAction("cn.jpush.android.intent.INIT");
+
+
         actionsFilter.addAction(JPushInterface.ACTION_REGISTRATION_ID);
 
         actionsFilter.addAction(JPushInterface.ACTION_MESSAGE_RECEIVED);
 
         actionsFilter.addAction(JPushInterface.ACTION_CONNECTION_CHANGE);
 
+        actionsFilter.addCategory("com.ctsi.push");
+
     }
 
+    boolean isStarted = false;
 
     private CtsiApplication application;
     RegisterCallback registerCallback;
     MessageFilter messageCallback;
     ConnectionCallback connectionCallback;
+    String alias;
+    Set<String> tags;
 
     public JPusher(Context context) {
         this.application = CtsiApplication.get(context);
@@ -48,12 +58,15 @@ public class JPusher implements IPusher {
     @Override
     public void start() {
         this.application.registerReceiver(broadcastReceiver, actionsFilter);
+        JPushInterface.setDebugMode(true);
         JPushInterface.init(this.application);
+        isStarted = true;
     }
 
     @Override
     public void stop() {
         JPushInterface.stopPush(this.application);
+        isStarted = false;
         this.application.unregisterReceiver(broadcastReceiver);
     }
 
@@ -62,25 +75,27 @@ public class JPusher implements IPusher {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             Bundle bundle = intent.getExtras();
-            if (JPushInterface.ACTION_REGISTRATION_ID.equals(action)) {
-
-                register(bundle);
-
-            } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(action)) {
-
+            if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(action)) {
                 messager(bundle);
             } else if (JPushInterface.ACTION_CONNECTION_CHANGE.equals(action)) {
                 connector(bundle);
-
             }
         }
     };
 
     private void register(Bundle bundle) {
         String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
-        if (this.registerCallback != null) {
-            this.registerCallback.onRegisterSuccess(regId);
+        if (!TextUtils.isEmpty(regId)) {
+            isStarted = true;
+            if (this.registerCallback != null) {
+                this.registerCallback.onRegisterSuccess(regId);
+            }
+        } else {
+            if (this.registerCallback != null) {
+                this.registerCallback.onRegisterFailed("注册失败");
+            }
         }
+
     }
 
     private void messager(Bundle bundle) {
@@ -103,12 +118,6 @@ public class JPusher implements IPusher {
 
 
     @Override
-    public boolean isStart() {
-        return !JPushInterface.isPushStopped(this.application);
-    }
-
-
-    @Override
     public void setAliasAndTags(String alias, Set<String> tags) {
         JPushInterface.setAliasAndTags(this.application, alias, tags, tagAliasCallback);
     }
@@ -120,10 +129,37 @@ public class JPusher implements IPusher {
         this.connectionCallback = connectionCallback;
     }
 
+
     private TagAliasCallback tagAliasCallback = new TagAliasCallback() {
         @Override
-        public void gotResult(int i, String s, Set<String> set) {
+        public void gotResult(int code, String s, Set<String> set) {
+
+            if (code == 0) {
+                //success;
+                alias = s;
+                tags = set;
+            }
 
         }
     };
+
+    @Override
+    public boolean isStarted() {
+        return isStarted;
+    }
+
+    @Override
+    public String getAlias() {
+        return alias;
+    }
+
+    @Override
+    public String getDeviceId() {
+        return JPushInterface.getRegistrationID(this.application);
+    }
+
+    @Override
+    public Set<String> getTags() {
+        return tags;
+    }
 }

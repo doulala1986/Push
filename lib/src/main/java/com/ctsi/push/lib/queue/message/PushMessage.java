@@ -58,4 +58,16 @@ public class PushMessage {
     public void setTime(long time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\n")
+                .append(" id:").append(getId()).append(",\n")
+                .append(" message:").append(getMessage()).append(",\n")
+                .append(" extras:").append(getExtras()).append(",\n")
+                .append(" time:").append(getTime()).append("\n")
+                .append("}");
+        return sb.toString();
+    }
 }

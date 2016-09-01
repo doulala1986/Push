@@ -17,17 +17,21 @@ public class PushService {
     }
 
     public synchronized void start() {
-        if (!pusher.isStart()) {
+        if (!pusher.isStarted()) {
             this.dispatcher.prepare();
             pusher.start();
         }
     }
 
     public synchronized void stop() {
-        if (pusher.isStart()) {
+        if (pusher.isStarted()) {
             this.dispatcher.clearJobQueue();
             pusher.stop();
         }
+    }
+
+    public boolean isStarted() {
+        return this.pusher.isStarted();
     }
 
     public void setAliasAndTags(String alias, Set<String> tags) {

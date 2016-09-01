@@ -2,6 +2,7 @@ package com.ctsi.push;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.ctsi.push.lib.PushBuilder;
 import com.ctsi.push.lib.PushService;
@@ -59,15 +60,20 @@ public class CtsiApplication extends Application {
         @Override
         public void onMessageBingo(PushMessage message) {
 
+
+            Log.i("onMessageBingo", message.toString());
         }
 
         @Override
         public void onMessageFailed(PushMessage message, Throwable ex) {
-
+            ex.printStackTrace();
+            Log.e("onMessageFailed", message.toString());
         }
 
         @Override
         public boolean onReceivedMessage(PushMessage message) {
+
+            Log.i ("onReceivedMessage", message.toString());
             return false;
         }
     };
@@ -76,11 +82,13 @@ public class CtsiApplication extends Application {
         @Override
         public void onRegisterSuccess(String deviceId) {
 
+            Log.i("onRegisterSuccess", "deviceId:" + deviceId);
+
         }
 
         @Override
         public void onRegisterFailed(String message) {
-
+            Log.e("onRegisterFailed", message);
         }
 
     };
@@ -88,6 +96,7 @@ public class CtsiApplication extends Application {
     private ConnectionCallback connectionCallback = new ConnectionCallback() {
         @Override
         public void onConnectionChanged(boolean connected) {
+            Log.e("onConnectionChanged", connected ? "建立连接" : "失去连接");
 
         }
     };
@@ -95,11 +104,13 @@ public class CtsiApplication extends Application {
     private IMessageHandler messageHandlerA = new IMessageHandler() {
         @Override
         public boolean isMessageMatched(PushMessage message) {
-            return false;
+            return message.getMessage().contains("location");
         }
 
         @Override
         public void execute(PushMessage message) {
+
+            Log.i ("messageHandler ", message.toString());
 
         }
     };

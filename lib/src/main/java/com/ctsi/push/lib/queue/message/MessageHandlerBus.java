@@ -42,7 +42,7 @@ public class MessageHandlerBus {
                 break;
             }
         }
-        if (handler_bigon == null && defaultMessageHandler.isMessageMatched(message)) {
+        if (handler_bigon == null &&defaultMessageHandler!=null&& defaultMessageHandler.isMessageMatched(message)) {
             handler_bigon = defaultMessageHandler;
         }
         if (handler_bigon != null) {
