@@ -5,7 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.ctsi.push.lib.PushBuilder;
-import com.ctsi.push.lib.PushService;
+import com.ctsi.push.lib.PushInterface;
 import com.ctsi.push.lib.pusher.ConnectionCallback;
 import com.ctsi.push.lib.pusher.MessageCallback;
 import com.ctsi.push.lib.pusher.RegisterCallback;
@@ -23,7 +23,7 @@ public class CtsiApplication extends Application {
         return (CtsiApplication) context.getApplicationContext();
     }
 
-    private PushService pushService;
+    private PushInterface pushService;
 
     @Override
     public void onCreate() {
@@ -38,7 +38,7 @@ public class CtsiApplication extends Application {
         pushService.stop();
     }
 
-    public PushService getPushService() {
+    public PushInterface getPushService() {
         return pushService;
     }
 

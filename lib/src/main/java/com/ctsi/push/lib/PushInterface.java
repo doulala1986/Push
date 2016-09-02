@@ -7,11 +7,11 @@ import java.util.Set;
 /**
  * Created by doulala on 16/8/30.
  */
-public class PushService {
+public class PushInterface {
     private IPusher pusher;
     private MessageDispatcher dispatcher;
 
-    protected PushService(IPusher pusher, MessageDispatcher dispatcher) {
+    protected PushInterface(IPusher pusher, MessageDispatcher dispatcher) {
         this.pusher = pusher;
         this.dispatcher = dispatcher;
     }

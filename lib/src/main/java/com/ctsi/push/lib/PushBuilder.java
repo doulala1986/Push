@@ -36,7 +36,7 @@ public class PushBuilder {
         return new PushBuilder();
     }
 
-    public PushService build() {
+    public PushInterface build() {
 
         //初始化Pusher,MessageQueuue
         MessageHandlerBus messageHandlerBus = new MessageHandlerBus(defaultMessageHandler, messageCallback);
@@ -47,7 +47,7 @@ public class PushBuilder {
         MessageDispatcher dispatcher = new MessageDispatcher(jobQueue);
         dispatcher.setMessageCallback(messageCallback);
         pusher.setCallbacks(registerCallback, dispatcher, connectionCallback);
-        return new PushService(pusher, dispatcher);
+        return new PushInterface(pusher, dispatcher);
     }
 
 
