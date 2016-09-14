@@ -67,7 +67,8 @@ public class JobQueue extends HandlerThread {
     }
 
 
-    public void clearJobs() {
+    private void clearJobs() {
+
         if (handler != null) {
             while (what_sequence > 0 && handler.hasMessages(what_sequence)) {
                 handler.removeMessages(what_sequence);

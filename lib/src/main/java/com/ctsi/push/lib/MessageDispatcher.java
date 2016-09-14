@@ -50,7 +50,7 @@ public class MessageDispatcher implements MessageFilter {
 
     protected void clearJobQueue() {
         if (jobQueue != null)
-            jobQueue.clearJobs();
+            jobQueue.release();
     }
 
 }

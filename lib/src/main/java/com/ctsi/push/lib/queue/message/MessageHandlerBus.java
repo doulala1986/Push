@@ -49,7 +49,7 @@ public class MessageHandlerBus {
             if (callback != null)
                 callback.onMessageBingo(message);
             try {
-                handler_bigon.equals(message);
+                handler_bigon.execute(message);
             } catch (Throwable ex) {
                 if (callback != null)
                     callback.onMessageFailed(message, ex);
