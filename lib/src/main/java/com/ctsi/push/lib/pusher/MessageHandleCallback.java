@@ -1,6 +1,7 @@
 package com.ctsi.push.lib.pusher;
 
-import com.ctsi.push.lib.queue.message.PushMessage;
+
+import com.ctsi.push.message.PushMessage;
 
 /**
  * Created by doulala on 16/9/1.

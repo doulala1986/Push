@@ -1,6 +1,7 @@
 package com.ctsi.push.lib.queue.message;
 
 import com.ctsi.push.lib.pusher.MessageHandleCallback;
+import com.ctsi.push.message.PushMessage;
 
 import java.util.ArrayList;
 

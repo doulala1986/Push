@@ -27,4 +27,10 @@ public interface IPusher {
     void setCallbacks(RegisterCallback registerCallback, MessageFilter messageCallback, ConnectionCallback connectionCallback);
 
 
+
+
+
+
+
+
 }

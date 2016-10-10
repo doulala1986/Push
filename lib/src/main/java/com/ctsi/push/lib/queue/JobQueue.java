@@ -5,7 +5,7 @@ import android.os.HandlerThread;
 import android.os.Message;
 
 import com.ctsi.push.lib.queue.message.MessageHandlerBus;
-import com.ctsi.push.lib.queue.message.PushMessage;
+import com.ctsi.push.message.PushMessage;
 
 /**
  * Created by doulala on 16/8/30.
@@ -15,7 +15,7 @@ import com.ctsi.push.lib.queue.message.PushMessage;
 public class JobQueue extends HandlerThread {
 
 
-    private static final String Tag = "push_job_queue";
+    private static final String Tag = "ctsi_push_job_queue";
 
     Handler handler;
 

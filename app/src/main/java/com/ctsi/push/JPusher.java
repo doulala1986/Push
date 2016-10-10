@@ -12,7 +12,7 @@ import com.ctsi.push.lib.pusher.ConnectionCallback;
 import com.ctsi.push.lib.pusher.IPusher;
 import com.ctsi.push.lib.pusher.MessageFilter;
 import com.ctsi.push.lib.pusher.RegisterCallback;
-import com.ctsi.push.lib.queue.message.PushMessage;
+import com.ctsi.push.message.PushMessage;
 
 import java.util.Set;
 
@@ -102,7 +102,8 @@ public class JPusher implements IPusher {
         String id = bundle.getString(JPushInterface.EXTRA_MSG_ID);
         String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
         String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-        PushMessage pushMessage = new PushMessage(id, message, extras);
+        PushMessage pushMessage = null;
+        // TODO: 2016/10/10   addPushConverter
         if (this.messageCallback != null) {
             this.messageCallback.onReceivedMessage(pushMessage);
         }

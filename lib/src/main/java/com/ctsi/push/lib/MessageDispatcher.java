@@ -2,7 +2,7 @@ package com.ctsi.push.lib;
 
 import com.ctsi.push.lib.queue.JobQueue;
 import com.ctsi.push.lib.pusher.MessageFilter;
-import com.ctsi.push.lib.queue.message.PushMessage;
+import com.ctsi.push.message.PushMessage;
 
 /**
  * Created by doulala on 16/8/29.
