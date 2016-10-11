@@ -58,7 +58,7 @@ public class JPusher implements IPusher {
     @Override
     public void start() {
         this.application.registerReceiver(broadcastReceiver, actionsFilter);
-        JPushInterface.setDebugMode(true);
+        JPushInterface.setDebugMode(false);
         JPushInterface.init(this.application);
         isStarted = true;
     }
@@ -100,8 +100,12 @@ public class JPusher implements IPusher {
 
     private void messager(Bundle bundle) {
         String id = bundle.getString(JPushInterface.EXTRA_MSG_ID);
-        String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
+        String title = bundle.getString(JPushInterface.EXTRA_TITLE);
+        String message= bundle.getString(JPushInterface.EXTRA_MESSAGE);
         String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
+        for(String key : bundle.keySet()){
+            Log.e(key,String.valueOf(bundle.get(key)));
+        }
         PushMessage pushMessage = null;
         // TODO: 2016/10/10   addPushConverter
         if (this.messageCallback != null) {

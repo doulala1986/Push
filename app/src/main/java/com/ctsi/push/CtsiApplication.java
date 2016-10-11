@@ -10,7 +10,7 @@ import com.ctsi.push.lib.pusher.ConnectionCallback;
 import com.ctsi.push.lib.pusher.MessageCallback;
 import com.ctsi.push.lib.pusher.RegisterCallback;
 import com.ctsi.push.lib.queue.message.IMessageHandler;
-import com.ctsi.push.lib.queue.message.PushMessage;
+import com.ctsi.push.message.PushMessage;
 
 /**
  * Created by doulala on 16/8/29.
@@ -104,7 +104,7 @@ public class CtsiApplication extends Application {
     private IMessageHandler messageHandlerA = new IMessageHandler() {
         @Override
         public boolean isMessageMatched(PushMessage message) {
-            return message.getMessage().contains("location");
+            return message.getCommandAction().getTopic().contains("location");
         }
 
         @Override
