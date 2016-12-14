@@ -38,7 +38,7 @@ public class MessageConverter {
         String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
         Gson gson = new Gson();
         HashMap<String, String> map = null;
-        if (TextUtils.isEmpty(extras)) {
+        if (!TextUtils.isEmpty(extras)) {
             map = gson.fromJson(extras, new TypeToken<HashMap<String, String>>() {
             }.getType());
         }
