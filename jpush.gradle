@@ -1,0 +1,7 @@
+ext {
+    jpush = [
+            JPUSH_PKGNAME: "com.ctsi.push",
+            JPUSH_APPKEY : "f954367d81978289b4427797", //JPush上注册的包名对应的appkey.
+            JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+    ]
+}

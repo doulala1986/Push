@@ -1,0 +1,7 @@
+ext {
+    tpush = [
+            TPUSH_PKGNAME: "com.ctsi.message",
+            TPUSH_ACCESS_ID : "2100246413",
+            TPUSH_ACCESS_KEY : "AKU54T3XA93B"
+    ]
+}

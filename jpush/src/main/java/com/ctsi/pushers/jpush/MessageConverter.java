@@ -1,8 +1,7 @@
-package com.ctsi.message.jpush;
+package com.ctsi.pushers.jpush;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.ctsi.push.message.CommandAction;
 import com.ctsi.push.message.NoticeContent;

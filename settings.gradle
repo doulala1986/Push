@@ -1,1 +1,1 @@
-include ':app', ':message', ':core'
+include ':app', ':message', ':core', ':jpush', ':tpush', ':tpush'

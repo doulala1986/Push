@@ -1,4 +1,4 @@
-package com.ctsi.message.jpush;
+package com.ctsi.pushers.jpush;
 
 import android.app.Activity;
 import android.app.Application;
@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.ctsi.message.CtsiApplication;
 import com.ctsi.push.core.pusher.ConnectionCallback;
 import com.ctsi.push.core.pusher.IPusher;
 import com.ctsi.push.core.pusher.MessageFilter;
@@ -47,7 +46,7 @@ public class JPusher implements IPusher {
 
     boolean isStarted = false;
 
-    private CtsiApplication application;
+    private Application application;
     RegisterCallback registerCallback;
     MessageFilter messageCallback;
     ConnectionCallback connectionCallback;
@@ -55,7 +54,7 @@ public class JPusher implements IPusher {
     Set<String> tags;
 
     public JPusher(Context context) {
-        this.application = CtsiApplication.get(context);
+        this.application = (Application) context.getApplicationContext();
         //this.application.registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
 
     }

@@ -1,12 +1,8 @@
 package com.ctsi.message;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
-
-import com.ctsi.message.jpush.JPusher;
 import com.ctsi.push.core.PushBuilder;
 import com.ctsi.push.core.PushInterface;
 import com.ctsi.push.core.pusher.ConnectionCallback;
@@ -14,6 +10,7 @@ import com.ctsi.push.core.pusher.MessageCallback;
 import com.ctsi.push.core.pusher.RegisterCallback;
 import com.ctsi.push.core.queue.message.IMessageHandler;
 import com.ctsi.push.message.PushMessage;
+import com.ctsi.pushers.jpush.JPusher;
 import com.google.gson.Gson;
 
 import java.util.Observable;
@@ -70,7 +67,6 @@ public class CtsiApplication extends Application {
                 .callback(registerCallback)
                 .callback(connectionCallback)
                 .build();
-
 
         pushService.start();
     }
