@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public interface IPusher {
 
-    void start();
+    void start(String alias, Set<String> tags);
 
     void stop();
 
@@ -20,9 +20,6 @@ public interface IPusher {
     String getDeviceId();
 
     Set<String> getTags();
-
-    void setAliasAndTags(String alias, Set<String> tags);
-
 
     void setCallbacks(RegisterCallback registerCallback, MessageFilter messageCallback, ConnectionCallback connectionCallback);
 

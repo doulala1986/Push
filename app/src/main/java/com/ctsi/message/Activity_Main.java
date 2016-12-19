@@ -29,8 +29,8 @@ public class Activity_Main extends Activity {
         tags.add("android");
 
 
-        if (CtsiApplication.get(Activity_Main.this).getPushService().isStarted()) {
-            CtsiApplication.get(Activity_Main.this).getPushService().setAliasAndTags("18911552161", tags);
+        if (!CtsiApplication.get(Activity_Main.this).getPushService().isStarted()) {
+            CtsiApplication.get(Activity_Main.this).getPushService().start("18911552161", tags);
         }
 
         application.getObservable().addObserver(observer);

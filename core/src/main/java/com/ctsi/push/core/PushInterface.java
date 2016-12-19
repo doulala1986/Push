@@ -17,10 +17,10 @@ public class PushInterface {
         this.dispatcher = dispatcher;
     }
 
-    public synchronized void start() {
+    public synchronized void start(String alias, Set<String> tags) {
         if (!pusher.isStarted()) {
             this.dispatcher.prepare();
-            pusher.start();
+            pusher.start(alias, tags);
         }
     }
 
@@ -35,10 +35,6 @@ public class PushInterface {
         return this.pusher.isStarted();
     }
 
-    public void setAliasAndTags(String alias, Set<String> tags) {
-        this.dispatcher.clearJobQueue();
-        pusher.setAliasAndTags(alias, tags);
-    }
 
 
 }

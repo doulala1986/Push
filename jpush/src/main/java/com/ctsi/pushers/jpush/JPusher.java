@@ -51,6 +51,7 @@ public class JPusher implements IPusher {
     MessageFilter messageCallback;
     ConnectionCallback connectionCallback;
     String alias;
+    String deviceId;
     Set<String> tags;
 
     public JPusher(Context context) {
@@ -95,14 +96,18 @@ public class JPusher implements IPusher {
         }
     };
 
-
     @Override
-    public void start() {
+    public void start(String alias, Set<String> tags) {
+        this.alias = alias;
+        this.tags = tags;
         this.application.registerReceiver(broadcastReceiver, actionsFilter);
         JPushInterface.setDebugMode(false);
         JPushInterface.init(this.application);
+        JPushInterface.setAliasAndTags(this.application, alias, tags, tagAliasCallback);
         isStarted = true;
+
     }
+
 
     @Override
     public void stop() {
@@ -127,9 +132,10 @@ public class JPusher implements IPusher {
     private void register(Bundle bundle) {
         String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
         if (!TextUtils.isEmpty(regId)) {
+            deviceId = regId;
             isStarted = true;
             if (this.registerCallback != null) {
-                this.registerCallback.onRegisterSuccess(regId);
+                this.registerCallback.onRegisterSuccess(deviceId);
             }
         } else {
             if (this.registerCallback != null) {
@@ -163,11 +169,6 @@ public class JPusher implements IPusher {
 
 
     @Override
-    public void setAliasAndTags(String alias, Set<String> tags) {
-        JPushInterface.setAliasAndTags(this.application, alias, tags, tagAliasCallback);
-    }
-
-    @Override
     public void setCallbacks(RegisterCallback registerCallback, MessageFilter messageCallback, ConnectionCallback connectionCallback) {
         this.registerCallback = registerCallback;
         this.messageCallback = messageCallback;
@@ -190,7 +191,7 @@ public class JPusher implements IPusher {
 
     @Override
     public boolean isStarted() {
-        return isStarted;
+        return !TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(getAlias());
     }
 
     @Override

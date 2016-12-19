@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.ctsi.push.core.pusher.ConnectionCallback;
 import com.ctsi.push.core.pusher.IPusher;
@@ -41,13 +42,21 @@ public class TPusher implements IPusher {
         this.application = (Application) context.getApplicationContext();
     }
 
+
     @Override
-    public void start() {
-        XGPushManager.registerPush(this.application, "*");//取消
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_PUSH_MESSAGE);
-        intentFilter.addAction(ACTION_PUSH_FEEDBACK);
-        this.application.registerReceiver(xgPushBaseReceiver, intentFilter);
+    public void start(String alias, Set<String> tags) {
+        this.alias = alias;
+        this.tags = tags;
+        XGPushManager.registerPush(this.application, alias);
+        for (String tag : tags) {
+            XGPushManager.setTag(this.application, tag);
+        }
+        if (!isStarted()) {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(ACTION_PUSH_MESSAGE);
+            intentFilter.addAction(ACTION_PUSH_FEEDBACK);
+            this.application.registerReceiver(xgPushBaseReceiver, intentFilter);
+        }
     }
 
     @Override
@@ -58,7 +67,7 @@ public class TPusher implements IPusher {
 
     @Override
     public boolean isStarted() {
-        return !TextUtils.isEmpty(deviceId);
+        return !TextUtils.isEmpty(deviceId) && !TextUtils.isEmpty(getAlias());
     }
 
     @Override
@@ -76,15 +85,6 @@ public class TPusher implements IPusher {
         return tags;
     }
 
-    @Override
-    public void setAliasAndTags(String alias, Set<String> tags) {
-        this.alias = alias;
-        this.tags = tags;
-        XGPushManager.registerPush(this.application, alias);
-        for (String tag : tags) {
-            XGPushManager.setTag(this.application, tag);
-        }
-    }
 
     @Override
     public void setCallbacks(RegisterCallback registerCallback, MessageFilter messageCallback, ConnectionCallback connectionCallback) {
@@ -101,28 +101,41 @@ public class TPusher implements IPusher {
 
     private XGPushBaseReceiver xgPushBaseReceiver = new XGPushBaseReceiver() {
         @Override
-        public void onRegisterResult(Context context, int i, XGPushRegisterResult xgPushRegisterResult) {
+        public void onRegisterResult(Context context, int code, XGPushRegisterResult registerMessage) {
 
+            deviceId = registerMessage.getToken();
+            if (registerCallback != null)
+                if (code == XGPushBaseReceiver.SUCCESS) {
+                    registerCallback.onRegisterSuccess(deviceId);
+                } else {
+                    registerCallback.onRegisterFailed("注册失败" + registerMessage.toString());
+                }
         }
 
         @Override
         public void onUnregisterResult(Context context, int i) {
 
+
+            Log.e("onUnregisterResult", "success:" + i);
         }
 
         @Override
         public void onSetTagResult(Context context, int i, String s) {
-
+            Log.e("onSetTagResult", "success:" + s);
         }
 
         @Override
         public void onDeleteTagResult(Context context, int i, String s) {
-
+            Log.e("onDeleteTagResult", "success:" + s);
         }
 
         @Override
         public void onTextMessage(Context context, XGPushTextMessage xgPushTextMessage) {
+            Log.e("onTextMessage", "success:" + xgPushTextMessage.toString());
 
+            if (messageCallback != null) {
+                messageCallback.onReceivedMessage(MessageConverter.converter(xgPushTextMessage));
+            }
         }
 
         @Override

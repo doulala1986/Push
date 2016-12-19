@@ -6,9 +6,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
 
-        <meta-data
-            android:name="com.tencent.rdm.uuid"
-            android:value="0a9aa75a-e184-4958-86ab-49f55e11e619" />
+        <!--<meta-data-->
+            <!--android:name="com.tencent.rdm.uuid"-->
+            <!--android:value="0a9aa75a-e184-4958-86ab-49f55e11e620" />-->
 
         <!-- 【必须】 信鸽receiver广播接收 -->
         <receiver

@@ -3,6 +3,7 @@ package com.ctsi.message;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+
 import com.ctsi.push.core.PushBuilder;
 import com.ctsi.push.core.PushInterface;
 import com.ctsi.push.core.pusher.ConnectionCallback;
@@ -10,7 +11,7 @@ import com.ctsi.push.core.pusher.MessageCallback;
 import com.ctsi.push.core.pusher.RegisterCallback;
 import com.ctsi.push.core.queue.message.IMessageHandler;
 import com.ctsi.push.message.PushMessage;
-import com.ctsi.pushers.jpush.JPusher;
+import com.ctsi.pushers.tpush.TPusher;
 import com.google.gson.Gson;
 
 import java.util.Observable;
@@ -60,15 +61,13 @@ public class CtsiApplication extends Application {
 
     private void initPush() {
         pushService = PushBuilder.builder()
-                .pusher(new JPusher(CtsiApplication.this))
+                .pusher(new TPusher(CtsiApplication.this))
                 .defaultMessageHandler(null)
                 .addMessageHandler(messageHandlerA)
                 .callback(messageCallback)
                 .callback(registerCallback)
                 .callback(connectionCallback)
                 .build();
-
-        pushService.start();
     }
 
 
@@ -129,6 +128,7 @@ public class CtsiApplication extends Application {
         public void execute(PushMessage message) {
 
             Log.i("messageHandler ", message.toString());
+
 
         }
     };
